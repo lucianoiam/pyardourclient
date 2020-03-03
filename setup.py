@@ -1,0 +1,12 @@
+from distutils.core import setup
+
+setup(
+    name='pyardourclient',
+    version='0.1.0',
+    packages=['pyardourclient'],
+    url='https://github.com/lucianoiam/pyardourclient',
+    license='GPLv3',
+    author='Luciano Iam',
+    author_email='lucianito@Gmail.com',
+    description='Provides a client library to interact with the Ardour WebSockets Server surface'
+)
