@@ -20,7 +20,7 @@ import asyncio
 import random
 import sys
 
-from asyncio_client import ArdourClient
+from pyardourclient.asyncio import ArdourClient
 
 
 async def demo():

@@ -18,7 +18,7 @@
 
 import time
 
-from callback_client import ArdourClient
+from pyardourclient.callback import ArdourClient
 
 
 class DemoListener:

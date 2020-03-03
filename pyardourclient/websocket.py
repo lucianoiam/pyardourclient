@@ -20,7 +20,7 @@
 from typing import Coroutine
 from websockets import connect
 
-from message import Message
+from .message import Message
 
 
 class ArdourWebsocket:

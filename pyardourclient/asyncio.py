@@ -17,8 +17,8 @@
 
 import asyncio
 
-from message import Node, Message, TypedValue, ValueList, AddressList
-from websocket import ArdourWebsocket
+from .message import Node, Message, TypedValue, ValueList, AddressList
+from .websocket import ArdourWebsocket
 
 
 class ArdourClient(ArdourWebsocket):
