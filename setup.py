@@ -1,6 +1,6 @@
-from distutils.core import setup
+import setuptools
 
-setup(
+setuptools.setup(
     name='pyardourclient',
     version='0.1.0',
     packages=['pyardourclient'],
@@ -8,5 +8,6 @@ setup(
     license='GPLv3',
     author='Luciano Iam',
     author_email='lucianito@Gmail.com',
-    description='Provides a client library to interact with the Ardour WebSockets Server surface'
+    description='Provides a client library to interact with the Ardour WebSockets Server surface',
+    python_requires='>=3.7',
 )
