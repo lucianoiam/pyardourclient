@@ -3,5 +3,8 @@ bin/pyinstaller
 __pycache__/
 *.pyc
 *.pyo
+build/
+dist/
+pyardourclient.egg-info/
 .vscode
 
