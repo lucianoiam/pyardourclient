@@ -23,13 +23,19 @@ from .websocket import ArdourWebsocket
 
 class ArdourClient(ArdourWebsocket):
 
-    def __init__(self, host: str = '127.0.0.1', port: int = 9000) -> None:
+    def __init__(self, host: str = '127.0.0.1', port: int = 3818) -> None:
         super().__init__(host, port)
         self._req_msg_hash = None
         self._resp_queue = asyncio.Queue(maxsize=1)
 
     async def get_tempo(self) -> float:
         return (await self._send_and_recv(Node.TEMPO))[0]
+
+    async def get_transport_roll(self) -> bool:
+        return (await self._send_and_recv(Node.TRANSPORT_ROLL))[0]
+
+    async def get_record_state(self) -> bool:
+        return (await self._send_and_recv(Node.RECORD_STATE))[0]
 
     async def get_strip_gain(self, strip_id: int) -> float:
         return (await self._send_and_recv(Node.STRIP_GAIN, (strip_id,)))[0]
@@ -48,6 +54,12 @@ class ArdourClient(ArdourWebsocket):
 
     async def set_tempo(self, bpm: float) -> None:
         await self._send(Node.TEMPO, (), (bpm,))
+
+    async def set_transport_roll(self, value: bool) -> None:
+        await self._send(Node.TRANSPORT_ROLL, (), (value,))
+
+    async def set_record_state(self, value: bool) -> None:
+        await self._send(Node.RECORD_STATE, (), (value,))
 
     async def set_strip_gain(self, strip_id: int, db: float) -> None:
         await self._send(Node.STRIP_GAIN, (strip_id,), (db,))

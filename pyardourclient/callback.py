@@ -31,7 +31,7 @@ Creates a background thread to run the asyncio based client
 
 class ArdourClient:
 
-    def __init__(self, host: str = '127.0.0.1', port: int = 9000) -> None:
+    def __init__(self, host: str = '127.0.0.1', port: int = 3818) -> None:
         self._host = host
         self._port = port
         self._callbacks = []
@@ -58,6 +58,12 @@ class ArdourClient:
     def get_tempo(self) -> None:
         self._send(Node.TEMPO)
 
+    def get_transport_roll(self) -> None:
+        self._send(Node.TRANSPORT_ROLL)
+    
+    def get_record_state(self) -> None:
+        self._send(Node.RECORD_STATE)
+
     def get_strip_gain(self, strip_id: int) -> None:
         self._send(Node.STRIP_GAIN, (strip_id,))
 
@@ -76,6 +82,12 @@ class ArdourClient:
 
     def set_tempo(self, bpm: float) -> None:
         self._send(Node.TEMPO, (), (bpm,))
+
+    def set_transport_roll(self, value: bool) -> None:
+        self._send(Node.TRANSPORT_ROLL, (), (value,))
+
+    def set_record_state(self, value: bool) -> None:
+        self._send(Node.RECORD_STATE, (), (value,))
 
     def set_strip_gain(self, strip_id: int, db: float) -> None:
         self._send(Node.STRIP_GAIN, (strip_id,), (db,))

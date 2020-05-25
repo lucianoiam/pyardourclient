@@ -2,7 +2,7 @@ import setuptools
 
 setuptools.setup(
     name='pyardourclient',
-    version='0.1.1',
+    version='0.1.2',
     packages=['pyardourclient'],
     url='https://github.com/lucianoiam/pyardourclient',
     license='GPLv3',
