@@ -55,15 +55,6 @@ class ArdourClient:
         self._socket = None
         self._recv_task = None
 
-    def get_tempo(self) -> None:
-        self._send(Node.TEMPO)
-
-    def get_transport_roll(self) -> None:
-        self._send(Node.TRANSPORT_ROLL)
-    
-    def get_record_state(self) -> None:
-        self._send(Node.RECORD_STATE)
-
     def get_strip_gain(self, strip_id: int) -> None:
         self._send(Node.STRIP_GAIN, (strip_id,))
 
@@ -80,14 +71,14 @@ class ArdourClient:
         self._send(Node.STRIP_PLUGIN_PARAM_VALUE,
                    (strip_id, plugin_id, param_id,))
 
-    def set_tempo(self, bpm: float) -> None:
-        self._send(Node.TEMPO, (), (bpm,))
+    def get_tempo(self) -> None:
+        self._send(Node.TRANSPORT_TEMPO)
 
-    def set_transport_roll(self, value: bool) -> None:
-        self._send(Node.TRANSPORT_ROLL, (), (value,))
-
-    def set_record_state(self, value: bool) -> None:
-        self._send(Node.RECORD_STATE, (), (value,))
+    def get_transport_roll(self) -> None:
+        self._send(Node.TRANSPORT_ROLL)
+    
+    def get_record_state(self) -> None:
+        self._send(Node.TRANSPORT_RECORD)
 
     def set_strip_gain(self, strip_id: int, db: float) -> None:
         self._send(Node.STRIP_GAIN, (strip_id,), (db,))
@@ -105,6 +96,15 @@ class ArdourClient:
         self._send(Node.STRIP_PLUGIN_PARAM_VALUE,
                    (strip_id, plugin_id, param_id,), (value,))
 
+    def set_tempo(self, bpm: float) -> None:
+        self._send(Node.TRANSPORT_TEMPO, (), (bpm,))
+
+    def set_transport_roll(self, value: bool) -> None:
+        self._send(Node.TRANSPORT_ROLL, (), (value,))
+
+    def set_record_state(self, value: bool) -> None:
+        self._send(Node.TRANSPORT_RECORD, (), (value,))
+    
     def _send(self, node: Node, addr: AddressList = [], val: ValueList = []) -> None:
         if self._loop and self._socket:
             msg = Message(node, addr, val)

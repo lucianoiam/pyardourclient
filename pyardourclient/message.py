@@ -23,19 +23,19 @@ from typing import List, Union
 
 class Node(Enum):
 
-    TEMPO = 'tempo'
-    POSITION_TIME = 'position_time'
-    TRANSPORT_ROLL = 'transport_roll'
-    RECORD_STATE = 'record_state'
-    STRIP_DESCRIPTION = 'strip_description'
-    STRIP_METER = 'strip_meter'
-    STRIP_GAIN = 'strip_gain'
-    STRIP_PAN = 'strip_pan'
-    STRIP_MUTE = 'strip_mute'
-    STRIP_PLUGIN_DESCRIPTION = 'strip_plugin_description'
-    STRIP_PLUGIN_ENABLE = 'strip_plugin_enable'
+    STRIP_DESCRIPTION              = 'strip_description'
+    STRIP_METER                    = 'strip_meter'
+    STRIP_GAIN                     = 'strip_gain'
+    STRIP_PAN                      = 'strip_pan'
+    STRIP_MUTE                     = 'strip_mute'
+    STRIP_PLUGIN_DESCRIPTION       = 'strip_plugin_description'
+    STRIP_PLUGIN_ENABLE            = 'strip_plugin_enable'
     STRUP_PLUGIN_PARAM_DESCRIPTION = 'strip_plugin_param_description'
-    STRIP_PLUGIN_PARAM_VALUE = 'strip_plugin_param_value'
+    STRIP_PLUGIN_PARAM_VALUE       = 'strip_plugin_param_value'
+    TRANSPORT_TEMPO                = 'transport_tempo'
+    TRANSPORT_TIME                 = 'transport_time'
+    TRANSPORT_ROLL                 = 'transport_roll'
+    TRANSPORT_RECORD               = 'transport_record'
 
 
 TypedValue = Union[bool, int, float, str]

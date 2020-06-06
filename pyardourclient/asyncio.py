@@ -28,38 +28,29 @@ class ArdourClient(ArdourWebsocket):
         self._req_msg_hash = None
         self._resp_queue = asyncio.Queue(maxsize=1)
 
-    async def get_tempo(self) -> float:
-        return (await self._send_and_recv(Node.TEMPO))[0]
-
-    async def get_transport_roll(self) -> bool:
-        return (await self._send_and_recv(Node.TRANSPORT_ROLL))[0]
-
-    async def get_record_state(self) -> bool:
-        return (await self._send_and_recv(Node.RECORD_STATE))[0]
-
     async def get_strip_gain(self, strip_id: int) -> float:
-        return (await self._send_and_recv(Node.STRIP_GAIN, (strip_id,)))[0]
+        return await self._send_and_recv_single(Node.STRIP_GAIN, (strip_id,))
 
     async def get_strip_pan(self, strip_id: int) -> float:
-        return (await self._send_and_recv(Node.STRIP_PAN, (strip_id,)))[0]
+        return await self._send_and_recv_single(Node.STRIP_PAN, (strip_id,))
 
     async def get_strip_mute(self, strip_id: int) -> bool:
-        return (await self._send_and_recv(Node.STRIP_MUTE, (strip_id,)))[0]
+        return await self._send_and_recv_single(Node.STRIP_MUTE, (strip_id,))
 
     async def get_strip_plugin_enable(self, strip_id: int, plugin_id: int) -> bool:
-        return (await self._send_and_recv(Node.STRIP_PLUGIN_ENABLE, (strip_id, plugin_id,)))[0]
+        return await self._send_and_recv_single(Node.STRIP_PLUGIN_ENABLE, (strip_id, plugin_id,))
 
     async def get_strip_plugin_param_value(self, strip_id: int, plugin_id: int, param_id: int) -> TypedValue:
-        return (await self._send_and_recv(Node.STRIP_PLUGIN_PARAM_VALUE, (strip_id, plugin_id, param_id,)))[0]
+        return await self._send_and_recv_single(Node.STRIP_PLUGIN_PARAM_VALUE, (strip_id, plugin_id, param_id,))
 
-    async def set_tempo(self, bpm: float) -> None:
-        await self._send(Node.TEMPO, (), (bpm,))
+    async def get_tempo(self) -> float:
+        return await self._send_and_recv_single(Node.TRANSPORT_TEMPO)
 
-    async def set_transport_roll(self, value: bool) -> None:
-        await self._send(Node.TRANSPORT_ROLL, (), (value,))
+    async def get_transport_roll(self) -> bool:
+        return await self._send_and_recv_single(Node.TRANSPORT_ROLL)
 
-    async def set_record_state(self, value: bool) -> None:
-        await self._send(Node.RECORD_STATE, (), (value,))
+    async def get_record_state(self) -> bool:
+        return await self._send_and_recv_single(Node.TRANSPORT_RECORD)
 
     async def set_strip_gain(self, strip_id: int, db: float) -> None:
         await self._send(Node.STRIP_GAIN, (strip_id,), (db,))
@@ -75,10 +66,19 @@ class ArdourClient(ArdourWebsocket):
 
     async def set_strip_plugin_param_value(self, strip_id: int, plugin_id: int, param_id: int, value: TypedValue) -> None:
         await self._send(Node.STRIP_PLUGIN_PARAM_VALUE, (strip_id, plugin_id, param_id,), (value,))
+    
+    async def set_tempo(self, bpm: float) -> None:
+        await self._send(Node.TRANSPORT_TEMPO, (), (bpm,))
+
+    async def set_transport_roll(self, value: bool) -> None:
+        await self._send(Node.TRANSPORT_ROLL, (), (value,))
+
+    async def set_record_state(self, value: bool) -> None:
+        await self._send(Node.TRANSPORT_RECORD, (), (value,))
 
     async def receive(self):
         msg = await super().receive()
-        # multiplex incoming stream and awaited request replies
+        # demux awaited request replies
         if self._req_msg_hash == msg.node_addr_hash():
             self._req_msg_hash = None
             await self._resp_queue.put(msg)
@@ -94,3 +94,6 @@ class ArdourClient(ArdourWebsocket):
         self._req_msg_hash = req_msg.node_addr_hash()
         resp_msg = await self._resp_queue.get()
         return resp_msg.val
+
+    async def _send_and_recv_single(self, node: Node, addr: AddressList = [], val: ValueList = []) -> TypedValue:
+        return (await self._send_and_recv(node, addr, val))[0]
